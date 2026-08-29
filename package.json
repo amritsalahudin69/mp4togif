@@ -1,0 +1,16 @@
+{
+  "name": "mp4togif",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Controlled-concurrency batch MP4 to GIF converter using FFmpeg",
+  "scripts": {
+    "batch": "node src/batch.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2"
+  }
+}
