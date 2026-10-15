@@ -72,3 +72,43 @@ failed; success-only, skipped-only, and empty batches exit zero.
 ```bash
 npm test
 ```
+
+jq '
+  (.targets[]
+   | select(.isStage == false)
+  ) |= (
+    .x = 2
+    | .y = -5
+    | .size = 60
+    | .visible = false
+  )
+' project.json > project.1.json
+
+jq '
+  .targets |= map(
+    if .isStage == false then
+      . as $t
+      | .blocks |= (
+          . as $blocks
+          | with_entries(
+              if (
+                .value.opcode == "control_wait"
+                and
+                .value.next != null
+                and
+                ($blocks[.value.next].opcode == "control_stop")
+                and
+                ($blocks[.value.next].fields.STOP_OPTION[0] == "other scripts in sprite")
+              )
+              then
+                .value.next = null
+              else
+                .
+              end
+          )
+        )
+    else
+      .
+    end
+  )
+' project.1.json > project.2.json
